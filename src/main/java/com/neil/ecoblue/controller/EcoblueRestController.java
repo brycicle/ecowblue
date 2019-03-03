@@ -1,13 +1,7 @@
 package com.neil.ecoblue.controller;
 
-import com.neil.ecoblue.model.Account;
-import com.neil.ecoblue.model.Item;
-import com.neil.ecoblue.model.Redeem;
-import com.neil.ecoblue.model.Transaction;
-import com.neil.ecoblue.repository.AccountRepository;
-import com.neil.ecoblue.repository.ItemRepository;
-import com.neil.ecoblue.repository.RedeemRepository;
-import com.neil.ecoblue.repository.TransactionRepository;
+import com.neil.ecoblue.model.*;
+import com.neil.ecoblue.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +22,8 @@ public class EcoblueRestController {
     ItemRepository itemRepository;
     @Autowired
     TransactionRepository transactionRepository;
+    @Autowired
+    PasswordRepository passwordRepository;
 
     @PostMapping("/checkuser")
     public String checkUser(HttpServletRequest request){
@@ -65,6 +61,14 @@ public class EcoblueRestController {
         redeem.setRedeemValue(Double.parseDouble(request.getParameter("redeemValue")));
         redeemRepository.save(redeem);
         return redeem.getRedeemName();
+    }
+
+    @PostMapping("/updatePassword")
+    public int updatePassword(HttpServletRequest request){
+        Password password = passwordRepository.findByPasswordId(0);
+        password.setPassword(request.getParameter("password"));
+        passwordRepository.save(password);
+        return password.getPasswordId();
     }
 
     @PostMapping("/deleteItem")

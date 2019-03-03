@@ -43,16 +43,16 @@
 				<div class="card col-5 shadow py-3 my-5 ml-2 transparent-card rounded">
 					<h5 class="card-title">Ecoblue Email</h5>
 					<div class="card-body">
-						<form action="/changepass" method="POST" enctype="multipart/form-data">
+						<form action="/changepass" id="changePassword" method="POST" enctype="multipart/form-data">
 							<div class="row">
 								<div class="col">
 									<input type="password" name="password" class="form-control" id="password" placeholder="Password">
 								</div>
 								<div class="col">
-									<input type="confirm-password" name="confirm-password" class="form-control" id="confirm-password" placeholder="Confirm Password">
+									<input type="password" name="confirm-password" class="form-control" id="confirm-password" placeholder="Confirm Password">
 								</div>
 								<div class="col">
-									<input type="submit" class="btn btn-block btn-success" value="Change Password">
+									<input type="button" id="passwordSubmit" class="btn btn-block btn-success" value="Change Password">
 								</div>
 							</div>
 						</form>
@@ -160,6 +160,35 @@
 
 <script>
     $('#accountTable').DataTable();
+    $("#passwordSubmit").click(function() {
+        if($("#password").val()==$("#confirm-password").val()){
+            jQuery.ajax({
+                url: '/updatePassword',
+                data: { password: $("#password").val()
+                },
+                method: "POST",
+                success: function (data) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: "Password Updated",
+                        type:'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.value) {
+                        location.reload();
+                    }
+                })
+                }
+            });
+        }else{
+            Swal.fire({
+                title: 'Error!',
+                text: "Password Does not match",
+                type:'warning'
+            })
+        }
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 </body>

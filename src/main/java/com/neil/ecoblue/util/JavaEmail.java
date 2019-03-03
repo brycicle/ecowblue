@@ -13,6 +13,9 @@ import javax.mail.internet.MimeMessage;
 import com.neil.ecoblue.model.Account;
 import com.neil.ecoblue.model.Item;
 import com.neil.ecoblue.model.Redeem;
+import com.neil.ecoblue.repository.PasswordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class JavaEmail implements Runnable{
 	
 	Properties emailProperties;
@@ -22,7 +25,8 @@ public class JavaEmail implements Runnable{
 	private Object item;
 	private int qty;
 	private int emailType;
-
+	@Autowired
+	PasswordRepository passwordRepository;
 	public Account getAccount() {
 		return account;
 	}
@@ -133,7 +137,7 @@ public class JavaEmail implements Runnable{
 
 		String emailHost = "smtp.gmail.com";
 		String fromUser = "ecoblue@iacademy.edu.ph";//just the id alone without @gmail.com
-		String fromUserEmailPassword = "blue2019";
+		String fromUserEmailPassword = passwordRepository.findByPasswordId(0).getPassword();
 
 		Transport transport = mailSession.getTransport("smtp");
 
